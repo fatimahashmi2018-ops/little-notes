@@ -1,0 +1,72 @@
+---
+import "../styles/global.css";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Supabase Connection Test</title>
+  </head>
+
+  <body class="min-h-screen bg-stone-50 flex items-center justify-center">
+
+    <div class="text-center space-y-4">
+
+      <h1 class="text-3xl font-bold">
+        Supabase Connection Test
+      </h1>
+
+      <button
+        id="test-button"
+        class="bg-black text-white px-6 py-3 rounded-lg"
+      >
+        Test Connection
+      </button>
+
+      <p id="result" class="text-stone-600">
+        Click the button to test your connection.
+      </p>
+
+    </div>
+
+  </body>
+</html>
+
+
+<script>
+  import { supabase } from "../lib/supabase.js";
+
+  const button = document.querySelector("#test-button");
+  const result = document.querySelector("#result");
+
+  if (!button || !result) {
+    throw new Error("Button or result element not found");
+  }
+
+  button.addEventListener("click", async () => {
+    result.textContent = "Connecting...";
+
+    try {
+      const { data, error } = await supabase
+        .from("notes")
+        .select("id")
+        .limit(1);
+
+      if (error) {
+        console.error("Supabase error:", error);
+        result.textContent = "Failed: " + error.message;
+        return;
+      }
+
+      console.log("Returned data:", data);
+
+      result.textContent =
+        `Success! Found ${data.length} notes.`;
+
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      result.textContent = "Unexpected error. Check console.";
+    }
+  });
+</script>

@@ -1,0 +1,7 @@
+{
+  "name": "little notes",
+  "compatibility_date": "2026-11-09", // Update to the day you deploy
+  "assets": {
+    "directory": "./dist"
+  }
+}
